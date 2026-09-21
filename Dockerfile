@@ -1,6 +1,7 @@
-FROM nginx
+FROM tomcat
 MAINTAINER satya
 LABEL this is to book movie tickets
-EXPOSE 80
-COPY index.html /usr/share/nginx/html/
+EXPOSE 8080
+RUN rm -rf /usr/local/tomcat/webapps/ROOT
+COPY index.html /usr/local/tomcat/webapps/
 
