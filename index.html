@@ -1,0 +1,1183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CineBook - Movie Ticket Booking</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Segoe UI", Arial, sans-serif;
+    }
+
+    body {
+      background: #0b0b12;
+      color: #fff;
+    }
+
+    /* ================= NAVBAR ================= */
+
+    nav {
+      height: 72px;
+      background: #11111a;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 7%;
+      border-bottom: 1px solid #272733;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .logo {
+      font-size: 27px;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    .logo span {
+      color: #ff3d71;
+    }
+
+    nav ul {
+      display: flex;
+      gap: 28px;
+      list-style: none;
+    }
+
+    nav a {
+      color: #d4d4dc;
+      text-decoration: none;
+      font-size: 15px;
+      transition: .2s;
+    }
+
+    nav a:hover {
+      color: #ff3d71;
+    }
+
+    .location {
+      color: #ddd;
+      margin-right: 20px;
+      font-size: 14px;
+    }
+
+    .login-btn {
+      background: #ff3d71;
+      color: white !important;
+      padding: 9px 19px;
+      border-radius: 20px;
+    }
+
+    /* ================= HERO ================= */
+
+    .hero {
+      min-height: 500px;
+      padding: 80px 7%;
+      display: flex;
+      align-items: center;
+
+      background:
+        linear-gradient(
+          90deg,
+          rgba(5,5,10,.97) 0%,
+          rgba(5,5,10,.78) 45%,
+          rgba(5,5,10,.2) 100%
+        ),
+        linear-gradient(135deg, #3a1024, #17122d);
+
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-content {
+      max-width: 620px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero-tag {
+      display: inline-block;
+      background: rgba(255,61,113,.15);
+      color: #ff6f96;
+      padding: 8px 15px;
+      border-radius: 20px;
+      font-size: 13px;
+      margin-bottom: 18px;
+    }
+
+    .hero h1 {
+      font-size: 54px;
+      line-height: 1.08;
+      margin-bottom: 18px;
+    }
+
+    .hero h1 span {
+      color: #ff3d71;
+    }
+
+    .hero p {
+      color: #c5c5cf;
+      font-size: 17px;
+      line-height: 1.6;
+      margin-bottom: 28px;
+    }
+
+    .hero-btn {
+      background: #ff3d71;
+      color: white;
+      padding: 14px 25px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 700;
+      display: inline-block;
+      transition: .2s;
+    }
+
+    .hero-btn:hover {
+      background: #e52f60;
+      transform: translateY(-2px);
+    }
+
+    /* ================= SEARCH ================= */
+
+    .search-box {
+      max-width: 1100px;
+      margin: -45px auto 45px;
+      position: relative;
+      z-index: 10;
+      background: #171720;
+      padding: 25px;
+      border-radius: 15px;
+      box-shadow: 0 15px 45px rgba(0,0,0,.4);
+      border: 1px solid #292936;
+    }
+
+    .search-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr 1.5fr auto;
+      gap: 14px;
+      align-items: end;
+    }
+
+    .field label {
+      display: block;
+      color: #9999a6;
+      font-size: 12px;
+      margin-bottom: 7px;
+      font-weight: 600;
+    }
+
+    .field input,
+    .field select {
+      width: 100%;
+      padding: 13px;
+      border-radius: 8px;
+      border: 1px solid #343440;
+      background: #22222d;
+      color: white;
+      outline: none;
+    }
+
+    .field input:focus,
+    .field select:focus {
+      border-color: #ff3d71;
+    }
+
+    .search-btn {
+      background: #ff3d71;
+      color: white;
+      border: none;
+      padding: 13px 22px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    .search-btn:hover {
+      background: #e52f60;
+    }
+
+    /* ================= MAIN ================= */
+
+    .container {
+      max-width: 1100px;
+      margin: auto;
+      padding: 0 20px;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 22px;
+    }
+
+    .section-header h2 {
+      font-size: 28px;
+    }
+
+    .section-header a {
+      color: #ff4b7c;
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    /* ================= MOVIE CARDS ================= */
+
+    .movies {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }
+
+    .movie-card {
+      background: #171720;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid #252531;
+      transition: .25s;
+    }
+
+    .movie-card:hover {
+      transform: translateY(-7px);
+      box-shadow: 0 15px 35px rgba(0,0,0,.45);
+      border-color: #ff3d71;
+    }
+
+    .poster {
+      height: 290px;
+      position: relative;
+      display: flex;
+      align-items: flex-end;
+      padding: 15px;
+      background-size: cover;
+      background-position: center;
+    }
+
+    /* Poster backgrounds */
+
+    .poster1 {
+      background:
+        linear-gradient(transparent, rgba(0,0,0,.85)),
+        linear-gradient(135deg, #311b92, #ff4081);
+    }
+
+    .poster2 {
+      background:
+        linear-gradient(transparent, rgba(0,0,0,.85)),
+        linear-gradient(135deg, #004d40, #00acc1);
+    }
+
+    .poster3 {
+      background:
+        linear-gradient(transparent, rgba(0,0,0,.85)),
+        linear-gradient(135deg, #4a148c, #ff6f00);
+    }
+
+    .poster4 {
+      background:
+        linear-gradient(transparent, rgba(0,0,0,.85)),
+        linear-gradient(135deg, #263238, #d32f2f);
+    }
+
+    .rating {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: #111;
+      padding: 6px 9px;
+      border-radius: 6px;
+      font-size: 12px;
+      color: #ffd166;
+    }
+
+    .movie-title {
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .movie-info {
+      padding: 15px;
+    }
+
+    .genre {
+      color: #9999a6;
+      font-size: 13px;
+      margin-top: 6px;
+    }
+
+    .language {
+      display: inline-block;
+      margin-top: 10px;
+      font-size: 11px;
+      border: 1px solid #444451;
+      padding: 4px 7px;
+      border-radius: 4px;
+      color: #bbb;
+    }
+
+    .book-btn {
+      width: 100%;
+      margin-top: 14px;
+      border: none;
+      padding: 10px;
+      background: #ff3d71;
+      color: white;
+      border-radius: 7px;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .book-btn:hover {
+      background: #e52f60;
+    }
+
+    /* ================= SHOWTIMES ================= */
+
+    .showtimes {
+      margin: 70px auto;
+    }
+
+    .show-card {
+      background: #171720;
+      padding: 20px;
+      border-radius: 12px;
+      border: 1px solid #292936;
+      margin-bottom: 15px;
+
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .theatre h3 {
+      font-size: 17px;
+    }
+
+    .theatre p {
+      color: #888894;
+      font-size: 13px;
+      margin-top: 6px;
+    }
+
+    .times {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .time {
+      padding: 9px 14px;
+      border: 1px solid #4b4b58;
+      border-radius: 6px;
+      color: #ddd;
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+    .time:hover {
+      border-color: #ff3d71;
+      color: #ff5a86;
+    }
+
+    /* ================= FEATURES ================= */
+
+    .features {
+      margin: 70px auto;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .feature {
+      background: #171720;
+      padding: 25px;
+      text-align: center;
+      border-radius: 12px;
+      border: 1px solid #292936;
+    }
+
+    .feature-icon {
+      font-size: 35px;
+      margin-bottom: 12px;
+    }
+
+    .feature h3 {
+      margin-bottom: 8px;
+    }
+
+    .feature p {
+      color: #92929e;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    /* ================= FOOTER ================= */
+
+    footer {
+      background: #07070b;
+      border-top: 1px solid #22222c;
+      padding: 40px 7%;
+      text-align: center;
+      color: #888894;
+    }
+
+    footer h2 {
+      color: white;
+      margin-bottom: 8px;
+    }
+
+    /* ================= MODAL ================= */
+
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.8);
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .modal-content {
+      background: #181820;
+      width: 100%;
+      max-width: 450px;
+      padding: 28px;
+      border-radius: 15px;
+      border: 1px solid #33333f;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 25px;
+    }
+
+    .close {
+      cursor: pointer;
+      font-size: 25px;
+      color: #aaa;
+    }
+
+    .seat-map {
+      display: grid;
+      grid-template-columns: repeat(8, 1fr);
+      gap: 8px;
+      margin: 25px 0;
+    }
+
+    .seat {
+      height: 28px;
+      border-radius: 5px;
+      background: #353541;
+      cursor: pointer;
+    }
+
+    .seat:hover {
+      background: #ff3d71;
+    }
+
+    .seat.selected {
+      background: #ff3d71;
+    }
+
+    .seat.booked {
+      background: #666;
+      cursor: not-allowed;
+    }
+
+    .confirm-btn {
+      width: 100%;
+      padding: 13px;
+      background: #ff3d71;
+      border: none;
+      border-radius: 8px;
+      color: white;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    /* ================= RESPONSIVE ================= */
+
+    @media(max-width: 900px) {
+
+      .movies {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .search-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .features {
+        grid-template-columns: 1fr;
+      }
+
+      .show-card {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+
+    @media(max-width: 600px) {
+
+      nav ul {
+        display: none;
+      }
+
+      nav {
+        padding: 0 20px;
+      }
+
+      .hero {
+        padding: 60px 25px;
+      }
+
+      .hero h1 {
+        font-size: 36px;
+      }
+
+      .search-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .movies {
+        grid-template-columns: 1fr;
+      }
+
+      .poster {
+        height: 360px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- NAVBAR -->
+
+  <nav>
+
+    <div class="logo">
+      Cine<span>Book</span> 🎬
+    </div>
+
+    <div class="location">
+      📍 Hyderabad
+    </div>
+
+    <ul>
+      <li><a href="#">Home</a></li>
+      <li><a href="#movies">Movies</a></li>
+      <li><a href="#showtimes">Theatres</a></li>
+      <li><a href="#">Offers</a></li>
+      <li><a href="#" class="login-btn">Login</a></li>
+    </ul>
+
+  </nav>
+
+  <!-- HERO -->
+
+  <section class="hero">
+
+    <div class="hero-content">
+
+      <span class="hero-tag">
+        🍿 Your movie night starts here
+      </span>
+
+      <h1>
+        Watch. Relax.<br>
+        <span>Enjoy the Show.</span>
+      </h1>
+
+      <p>
+        Discover the latest movies, explore nearby theatres,
+        choose your favorite seats and book your tickets in seconds.
+      </p>
+
+      <a href="#movies" class="hero-btn">
+        Explore Movies →
+      </a>
+
+    </div>
+
+  </section>
+
+  <!-- SEARCH -->
+
+  <div class="search-box">
+
+    <div class="search-grid">
+
+      <div class="field">
+
+        <label>LOCATION</label>
+
+        <select>
+          <option>Hyderabad</option>
+          <option>Bengaluru</option>
+          <option>Mumbai</option>
+          <option>Chennai</option>
+          <option>Delhi</option>
+        </select>
+
+      </div>
+
+      <div class="field">
+
+        <label>DATE</label>
+
+        <input type="date">
+
+      </div>
+
+      <div class="field">
+
+        <label>SEARCH MOVIE</label>
+
+        <input
+          type="text"
+          id="movieSearch"
+          placeholder="Search movie..."
+        >
+
+      </div>
+
+      <button
+        class="search-btn"
+        onclick="searchMovie()"
+      >
+        🔍 Search
+      </button>
+
+    </div>
+
+  </div>
+
+  <!-- MOVIES -->
+
+  <main class="container" id="movies">
+
+    <div class="section-header">
+
+      <h2>🎬 Now Showing</h2>
+
+      <a href="#">
+        View All →
+      </a>
+
+    </div>
+
+    <div class="movies">
+
+      <!-- Movie 1 -->
+
+      <div class="movie-card">
+
+        <div class="poster poster1">
+
+          <span class="rating">
+            ⭐ 8.7
+          </span>
+
+          <div class="movie-title">
+            Midnight Horizon
+          </div>
+
+        </div>
+
+        <div class="movie-info">
+
+          <div class="genre">
+            Action • Thriller
+          </div>
+
+          <span class="language">
+            English
+          </span>
+
+          <button
+            class="book-btn"
+            onclick="openBooking('Midnight Horizon')"
+          >
+            Book Tickets
+          </button>
+
+        </div>
+
+      </div>
+
+      <!-- Movie 2 -->
+
+      <div class="movie-card">
+
+        <div class="poster poster2">
+
+          <span class="rating">
+            ⭐ 8.3
+          </span>
+
+          <div class="movie-title">
+            Ocean Secrets
+          </div>
+
+        </div>
+
+        <div class="movie-info">
+
+          <div class="genre">
+            Adventure • Drama
+          </div>
+
+          <span class="language">
+            English
+          </span>
+
+          <button
+            class="book-btn"
+            onclick="openBooking('Ocean Secrets')"
+          >
+            Book Tickets
+          </button>
+
+        </div>
+
+      </div>
+
+      <!-- Movie 3 -->
+
+      <div class="movie-card">
+
+        <div class="poster poster3">
+
+          <span class="rating">
+            ⭐ 9.0
+          </span>
+
+          <div class="movie-title">
+            City of Dreams
+          </div>
+
+        </div>
+
+        <div class="movie-info">
+
+          <div class="genre">
+            Drama • Romance
+          </div>
+
+          <span class="language">
+            Telugu
+          </span>
+
+          <button
+            class="book-btn"
+            onclick="openBooking('City of Dreams')"
+          >
+            Book Tickets
+          </button>
+
+        </div>
+
+      </div>
+
+      <!-- Movie 4 -->
+
+      <div class="movie-card">
+
+        <div class="poster poster4">
+
+          <span class="rating">
+            ⭐ 8.5
+          </span>
+
+          <div class="movie-title">
+            The Last Mission
+          </div>
+
+        </div>
+
+        <div class="movie-info">
+
+          <div class="genre">
+            Action • Sci-Fi
+          </div>
+
+          <span class="language">
+            Hindi
+          </span>
+
+          <button
+            class="book-btn"
+            onclick="openBooking('The Last Mission')"
+          >
+            Book Tickets
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- SHOWTIMES -->
+
+    <section class="showtimes" id="showtimes">
+
+      <div class="section-header">
+
+        <h2>📍 Popular Theatres</h2>
+
+        <a href="#">
+          See All →
+        </a>
+
+      </div>
+
+      <div class="show-card">
+
+        <div class="theatre">
+
+          <h3>INOX • GVK One</h3>
+
+          <p>
+            Banjara Hills • Hyderabad
+          </p>
+
+        </div>
+
+        <div class="times">
+
+          <span class="time">10:30 AM</span>
+          <span class="time">1:45 PM</span>
+          <span class="time">5:15 PM</span>
+          <span class="time">8:45 PM</span>
+
+        </div>
+
+      </div>
+
+      <div class="show-card">
+
+        <div class="theatre">
+
+          <h3>AMB Cinemas</h3>
+
+          <p>
+            Gachibowli • Hyderabad
+          </p>
+
+        </div>
+
+        <div class="times">
+
+          <span class="time">11:00 AM</span>
+          <span class="time">2:30 PM</span>
+          <span class="time">6:00 PM</span>
+          <span class="time">9:30 PM</span>
+
+        </div>
+
+      </div>
+
+      <div class="show-card">
+
+        <div class="theatre">
+
+          <h3>PVR Cinemas</h3>
+
+          <p>
+            Hitech City • Hyderabad
+          </p>
+
+        </div>
+
+        <div class="times">
+
+          <span class="time">9:45 AM</span>
+          <span class="time">12:50 PM</span>
+          <span class="time">4:20 PM</span>
+          <span class="time">7:50 PM</span>
+
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- FEATURES -->
+
+    <section class="features">
+
+      <div class="feature">
+
+        <div class="feature-icon">
+          🎟️
+        </div>
+
+        <h3>Easy Booking</h3>
+
+        <p>
+          Choose your movie, theatre and seats
+          with just a few clicks.
+        </p>
+
+      </div>
+
+      <div class="feature">
+
+        <div class="feature-icon">
+          💳
+        </div>
+
+        <h3>Secure Payments</h3>
+
+        <p>
+          Pay securely using cards, UPI and
+          other convenient payment methods.
+        </p>
+
+      </div>
+
+      <div class="feature">
+
+        <div class="feature-icon">
+          📱
+        </div>
+
+        <h3>Digital Tickets</h3>
+
+        <p>
+          Get your ticket instantly and show
+          the QR code at the theatre.
+        </p>
+
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- BOOKING MODAL -->
+
+  <div class="modal" id="bookingModal">
+
+    <div class="modal-content">
+
+      <div class="modal-header">
+
+        <div>
+
+          <h2 id="selectedMovie">
+            Select Seats
+          </h2>
+
+          <p style="color:#999; margin-top:5px;">
+            Choose your preferred seats
+          </p>
+
+        </div>
+
+        <span
+          class="close"
+          onclick="closeBooking()"
+        >
+          ×
+        </span>
+
+      </div>
+
+      <div style="
+        text-align:center;
+        padding:8px;
+        background:#292933;
+        border-radius:5px;
+        font-size:12px;
+      ">
+        SCREEN
+      </div>
+
+      <div class="seat-map">
+
+        <div class="seat"></div>
+        <div class="seat"></div>
+        <div class="seat booked"></div>
+        <div class="seat"></div>
+        <div class="seat"></div>
+        <div class="seat"></div>
+        <div class="seat booked"></div>
+        <div class="seat"></div>
+
+        <div class="seat"></div>
+        <div class="seat selected"></div>
+        <div class="seat"></div>
+        <div class="seat"></div>
+        <div class="seat"></div>
+        <div class="seat booked"></div>
+        <div class="seat"></div>
+        <div class="seat"></div>
+
+        <div class="seat"></div>
+        <div class="seat"></div>
+        <div class="seat"></div>
+        <div class="seat booked"></div>
+        <div class="seat"></div>
+        <div class="seat"></div>
+        <div class="seat"></div>
+        <div class="seat"></div>
+
+        <div class="seat"></div>
+        <div class="seat"></div>
+        <div class="seat booked"></div>
+        <div class="seat"></div>
+        <div class="seat"></div>
+        <div class="seat"></div>
+        <div class="seat"></div>
+        <div class="seat"></div>
+
+      </div>
+
+      <div style="
+        display:flex;
+        justify-content:space-between;
+        color:#aaa;
+        font-size:13px;
+        margin-bottom:20px;
+      ">
+
+        <span>
+          🟣 Selected
+        </span>
+
+        <span>
+          ⚫ Available
+        </span>
+
+        <span>
+          ⚪ Booked
+        </span>
+
+      </div>
+
+      <button
+        class="confirm-btn"
+        onclick="confirmBooking()"
+      >
+        Continue to Payment
+      </button>
+
+    </div>
+
+  </div>
+
+  <!-- FOOTER -->
+
+  <footer>
+
+    <h2>
+      Cine<span style="color:#ff3d71;">Book</span> 🎬
+    </h2>
+
+    <p>
+      Your movie. Your seat. Your experience.
+    </p>
+
+    <p style="margin-top:15px;">
+      © 2026 CineBook. All rights reserved.
+    </p>
+
+  </footer>
+
+  <!-- JAVASCRIPT -->
+
+  <script>
+
+    function searchMovie() {
+
+      const movie =
+        document.getElementById("movieSearch").value;
+
+      if (movie.trim() === "") {
+
+        alert("Please enter a movie name.");
+
+      } else {
+
+        alert(
+          "Searching for: " + movie
+        );
+
+      }
+
+    }
+
+    function openBooking(movie) {
+
+      document.getElementById("selectedMovie").innerText =
+        movie;
+
+      document.getElementById("bookingModal").style.display =
+        "flex";
+
+    }
+
+    function closeBooking() {
+
+      document.getElementById("bookingModal").style.display =
+        "none";
+
+    }
+
+    function confirmBooking() {
+
+      alert(
+        "Your seats have been selected! Proceeding to payment..."
+      );
+
+    }
+
+    /* Seat selection */
+
+    document.querySelectorAll(".seat").forEach(seat => {
+
+      seat.addEventListener("click", function() {
+
+        if (!this.classList.contains("booked")) {
+
+          this.classList.toggle("selected");
+
+        }
+
+      });
+
+    });
+
+    /* Close modal when clicking outside */
+
+    window.addEventListener("click", function(event) {
+
+      const modal =
+        document.getElementById("bookingModal");
+
+      if (event.target === modal) {
+
+        closeBooking();
+
+      }
+
+    });
+
+  </script>
+
+</body>
+</html>
