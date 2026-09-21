@@ -1,4 +1,4 @@
-FROM NGINX
+FROM nginx
 MAINTAINER satya
 LABEL this is to book movie tickets
 EXPOSE 80
