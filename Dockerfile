@@ -1,4 +1,4 @@
-FROM tomcat
+tomcat:10-jdk17
 MAINTAINER satya
 LABEL this is to book movie tickets
 EXPOSE 8080
